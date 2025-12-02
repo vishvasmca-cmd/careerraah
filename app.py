@@ -3,7 +3,7 @@ from urllib.parse import quote_plus
 from fpdf import FPDF
 
 # --- 1. & 2. Brand Personality & Global Design System ---
-st.set_page_config(page_title="CareerRaah", layout="wide")
+st.set_page_config(page_title="CareerRaah", page_icon="🚀", layout="centered")
 
 st.markdown("""
     <style>
@@ -30,52 +30,25 @@ st.markdown("""
         }
 
         /* Hide default Streamlit elements */
-        #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         .st-emotion-cache-1c5k3kr {display: none;}
 
         /* --- 3.1 Header --- */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .header-container {
             padding: 1rem 2rem;
             background-color: var(--soft-white);
-            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
-            z-index: 1000;
         }
-        .header .title {
+        .header-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             color: var(--primary-blue);
+            padding-top: 10px; /* Adjust for vertical alignment */
         }
-        .header .nav {
-            display: flex;
-            align-items: center;
-        }
-        .header .nav a {
-            margin: 0 1rem;
-            color: var(--dark-text);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .header .nav .cta-button {
-            background-color: var(--secondary-yellow);
-            color: var(--dark-text);
-            padding: 0.5rem 1rem;
-            border-radius: 12px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
+        
         /* --- 3.2 Hero Section --- */
         .hero {
-            padding-top: 8rem; /* Space for sticky header */
+            padding-top: 2rem;
             text-align: center;
         }
         .hero h1 {
@@ -88,23 +61,7 @@ st.markdown("""
             max-width: 600px;
             margin: 0 auto;
         }
-        .hero .cta-button {
-            background-color: var(--secondary-yellow);
-            color: var(--dark-text);
-            padding: 1rem 2rem;
-            border-radius: 16px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 2rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .hero .sub-cta {
-            margin-top: 1rem;
-            color: gray;
-        }
-
+        
         /* --- 4. Why CareerRaah --- */
         .trust-section {
             padding: 4rem 2rem;
@@ -156,6 +113,50 @@ st.markdown("""
             color: var(--light-grey);
         }
 
+        /* Mobile-First Improvements */
+        @media (max-width: 767px) {
+            /* Header becomes stacked to save horizontal space */
+            .header-container {
+                padding: 0.6rem 0.8rem;
+            }
+            .header-title {
+                font-size: 1.25rem;
+                padding-top: 6px;
+            }
+            .header-cta { display: none; }
+
+            /* Hero & headings scaled for mobile */
+            .hero h1 { font-size: 1.6rem; line-height:1.15; }
+            .hero p { font-size: 0.95rem; padding: 0 0.5rem; }
+
+            /* Trust / goal sections stack and cards become full-width */
+            .trust-section, .goal-section { padding: 1.5rem 0.75rem; }
+            .trust-card { margin-bottom: 1rem; box-shadow: none; }
+
+            /* Make form controls and buttons full-width and larger for touch */
+            .stButton>button, .stButton>div>button {
+                width: 100% !important;
+                padding: 12px 14px !important;
+                font-size: 1rem !important;
+            }
+            .stTextInput>div>div>input, textarea, select, .stSelectbox>div>div>select, .stSlider>div {
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+
+            /* Ensure columns stack vertically */
+            .stColumns [class*="css-"] {
+                flex-direction: column !important;
+            }
+
+            img, .logo img { max-width: 100% !important; height: auto !important; }
+        }
+
+        /* Desktop container width to improve readability */
+        @media (min-width: 768px) {
+            .block-container { max-width: 960px; margin: 0 auto; }
+        }
+
     </style>
 """, unsafe_allow_html=True)
 
@@ -171,7 +172,13 @@ def generate_pdf(roadmap_data):
     for key, value in roadmap_data.items():
         pdf.cell(200, 10, txt=f"{key.replace('_', ' ').title()}: {value}", ln=True)
         
-    return pdf.output(dest='S').encode('latin-1')
+    # fpdf2's output may return bytes or a bytearray depending on the environment.
+    pdf_bytes = pdf.output(dest='S')
+    if isinstance(pdf_bytes, bytearray):
+        return bytes(pdf_bytes)
+    if isinstance(pdf_bytes, str):
+        return pdf_bytes.encode('latin-1')
+    return pdf_bytes
 
 
 # --- Session State ---
@@ -186,20 +193,33 @@ if 'form_inputs' not in st.session_state:
 def navigate_to(page_name):
     st.session_state.page = page_name
 
-# --- 3.1 Header ---
-st.markdown("""
-    <div class="header">
-        <div class="title">CareerRaah</div>
-        <div class="nav">
-            <a href="#">Why CareerRaah</a>
-            <a href="#">Features</a>
-            <a href="#">Pricing</a>
-            <a href="#">For Parents</a>
-            <a href="#">Login</a>
-            <a href="#" class="cta-button">Start Your Path →</a>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+# --- Sidebar Navigation ---
+with st.sidebar:
+    st.image("logo/careerRaah-logo.png", width=150)
+    st.markdown("---")
+    if st.button("Home 🏠"):
+        navigate_to("Home")
+    st.markdown("### Why CareerRaah")
+    st.markdown("### Features")
+    st.markdown("### Pricing")
+    st.markdown("### For Parents")
+    st.markdown("---")
+    st.button("Login")
+    if st.button("Start Your Path →", type="primary"):
+        navigate_to("Home")
+
+
+# --- Simplified Header ---
+col1, col2 = st.columns([3, 1])
+with col1:
+    st.markdown('<div class="header-title">CareerRaah</div>', unsafe_allow_html=True)
+with col2:
+    st.markdown('<div class="header-cta">', unsafe_allow_html=True)
+    if st.button("Start My Career Journey →", type="primary", use_container_width=True):
+        # This button is for visual representation in the header, 
+        # the main CTA is in the hero section.
+        pass
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # --- Page Routing ---
@@ -209,10 +229,13 @@ if st.session_state.page == 'Home':
         <div class="hero">
             <h1>Find Your Path. Build Your Future.</h1>
             <p>Private. Instant. Judgment-free career guidance — for every student in India.</p>
-            <a href="#" class="cta-button">Start My Career Journey →</a>
-            <p class="sub-cta">Free • Private • Takes 30 seconds</p>
         </div>
     """, unsafe_allow_html=True)
+    if st.button("Start My Career Journey →", type="primary", key="hero_cta"):
+        # This is the main CTA
+        # In a real app this would scroll to the form
+        st.info("Please fill out the form below to get started.")
+
 
     # --- 4. Why CareerRaah ---
     with st.container():
