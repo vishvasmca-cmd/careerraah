@@ -4,150 +4,174 @@ import numpy as np
 import time
 from urllib.parse import quote_plus
 
-st.set_page_config(page_title="CareerRaah", page_icon="🚀", layout="centered")
+st.set_page_config(page_title="CareerRaah", page_icon="🚀", layout="wide")
 
-st.title("CareerRaah")
-st.markdown("#### Sahi Raah, Sahi Career")
+st.markdown("""
+    <style>
+        /* Hide Streamlit's default menu and footer */
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
 
-with st.form(key='inputs'):
-    name = st.text_input("Name")
-    career_goal = st.selectbox("Career Goal", [
-        "Software Engineer",
-        "Data Scientist",
-        "Govt Job",
-        "MBA",
-    ])
-    budget = st.slider("Budget (INR)", 0, 200000, 20000, step=1000)
-    generate = st.form_submit_button("Generate Roadmap")
-
-
-def build_roadmap(name, career_goal, budget):
-    person = name.strip() if name else "Candidate"
-
-    # Base templates
-    templates = {
-        "Software Engineer": {
-            "Immediate": [
-                "Polish your resume and GitHub profile",
-                "Learn core data structures & algorithms (2-4 weeks)",
-                "Apply to internships / junior roles consistently"
-            ],
-            "Short": [
-                "Complete 2–3 real-world projects and publish on GitHub",
-                "Prepare system design basics and mock interviews",
-                "Take a focused course (web/backend/frontend depending on interest)"
-            ],
-            "Long": [
-                "Target stable role at a reputable product/engineering company",
-                "Contribute to open-source and mentor juniors",
-                "Plan specializations (cloud, ML infra, security)"
-            ]
-        },
-        "Data Scientist": {
-            "Immediate": [
-                "Refresh Python, statistics, and SQL basics",
-                "Build a simple end-to-end ML project",
-                "Create a portfolio notebook (Kaggle or GitHub)"
-            ],
-            "Short": [
-                "Complete courses on ML and model deployment",
-                "Participate in competitions / internships",
-                "Learn tools: pandas, scikit-learn, basic MLOps"
-            ],
-            "Long": [
-                "Aim for roles delivering business impact with models",
-                "Master advanced ML topics and deployment pipelines",
-                "Publish case studies or talks"
-            ]
-        },
-        "Govt Job": {
-            "Immediate": [
-                "Identify the specific exam or service you want to target",
-                "Collect syllabus and past papers",
-                "Set a daily study schedule"
-            ],
-            "Short": [
-                "Join a focused coaching/class or follow a disciplined course",
-                "Regular mock tests and time management practice",
-                "Strengthen general knowledge and optional subject"
-            ],
-            "Long": [
-                "Attempt the exam with multiple mocks and revisions",
-                "Follow through with interviews or document processes",
-                "Plan backups and upskilling for alternate careers"
-            ]
-        },
-        "MBA": {
-            "Immediate": [
-                "Research target business schools and their requirements",
-                "Strengthen your profile (work experience highlights)",
-                "Prepare for entrance tests (CAT/GMAT/GRE)"
-            ],
-            "Short": [
-                "Take a structured test-prep course if needed",
-                "Work on essays, recommendations, and interview practice",
-                "Network with alumni and attend info sessions"
-            ],
-            "Long": [
-                "Aim for admission and plan specialization",
-                "Leverage internships and leadership opportunities",
-                "Build long-term career goals post-MBA"
-            ]
+        /* App-wide font */
+        html, body, [class*="st-"] {
+            font-family: 'sans-serif';
         }
+
+        /* Header styling */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #0056D2; /* Trust Blue */
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .header .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .header .button {
+            background-color: #FF6B00; /* Action Orange */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Hero Banner */
+        .hero {
+            padding: 3rem 1rem;
+            background: linear-gradient(to right, #0056D2, #007BFF);
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        /* Footer styling */
+        .footer {
+            margin-top: 3rem;
+            padding: 2rem 1rem;
+            background-color: #f0f2f6;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .footer a {
+            color: #0056D2;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer .disclaimer {
+            color: gray;
+            font-size: 0.9rem;
+        }
+        .footer .socials {
+            margin-top: 1rem;
+        }
+        .footer .socials a {
+            font-size: 1.5rem;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# --- Header ---
+col1, col2 = st.columns([3, 1])
+with col1:
+    st.markdown('<p class="header title">CareerRaah</p>', unsafe_allow_html=True)
+with col2:
+    st.markdown('<a href="#" class="button">Login / Sign Up</a>', unsafe_allow_html=True)
+
+# --- Hero Banner ---
+st.markdown("""
+<div class="hero">
+    <h1>Confused About Your Career?</h1>
+    <p>Get a personalized Roadmap to Google, UPSC, or MBA in 30 seconds. Powered by AI.</p>
+</div>
+""", unsafe_allow_html=True)
+
+
+# --- Input Engine ---
+with st.form(key='inputs'):
+    current_status = st.selectbox("Current Status", ["Class 10", "Class 12", "College Student"])
+    goal = st.selectbox("Goal", ["Engineer", "Doctor", "CA", "Govt Job", "Not Sure"])
+    budget = st.selectbox("Budget", ["< ₹1L", "₹2L-5L", "₹5L+"])
+    marks = st.selectbox("Marks", ["<60%", "60-80%", ">90%"])
+    generate = st.form_submit_button("Generate My CareerRaah ⚡")
+
+
+def build_roadmap(status, goal, budget, marks):
+    # This is a placeholder for a more complex AI-driven logic.
+    # For now, we use a simple rule-based system.
+    
+    strategy = "Based on your inputs, here is a starting point."
+    if budget == "< ₹1L":
+        strategy = "Since your budget is low, we recommend focusing on free online resources and entrance exams for government colleges."
+    elif budget == "₹2L-5L" and marks in ["60-80%", ">90%"]:
+        strategy = "With your budget and marks, you can consider private colleges with good placement records or specialized online certifications."
+    
+    immediate_step = "Watch this specific YouTube Playlist today."
+    if goal == "Engineer":
+        immediate_step = "Start with the 'Data Structures and Algorithms in One Shot' playlist by Apna College on YouTube."
+    elif goal == "Doctor":
+        immediate_step = "Review the NEET syllabus and start with NCERT biology textbooks."
+
+    monetization = {
+        "text": "Recommended Certification: [Link to Coursera/Udemy] - 20% Off.",
+        "url": f"https://example.com/recommended?course={quote_plus(goal)}"
     }
-
-    # Budget-sensitive suggestions
-    budget_hint = []
-    if budget < 5000:
-        budget_hint.append("Budget low: prioritize free resources (YouTube, free courses) and community projects.")
-    elif budget < 30000:
-        budget_hint.append("Moderate budget: selective paid courses, mentorship calls, or guided projects can help.")
-    else:
-        budget_hint.append("Healthy budget: consider end-to-end professional courses, mentorship, and bootcamps.")
-
-    chosen = templates.get(career_goal)
-
+    
     roadmap = {
-        "person": person,
-        "career_goal": career_goal,
-        "budget_hint": budget_hint,
-        "Immediate": chosen["Immediate"],
-        "Short Term": chosen["Short"],
-        "Long Term": chosen["Long"]
+        "strategy": strategy,
+        "immediate_step": immediate_step,
+        "monetization": monetization
     }
     return roadmap
 
 
 if generate:
-    with st.spinner("Generating your personalized roadmap..."):
+    with st.spinner("Analyzing market trends... Checking colleges... Building your path..."):
         time.sleep(1.6)
 
-    roadmap = build_roadmap(name, career_goal, budget)
-
-    st.subheader(f"Roadmap — {roadmap['career_goal']}")
-    st.write(f"Personalized for: **{roadmap['person']}**")
-
-    st.markdown("**Immediate Action**")
-    for item in roadmap["Immediate"]:
-        st.write("- " + item)
-
-    st.markdown("**Short Term**")
-    for item in roadmap["Short Term"]:
-        st.write("- " + item)
-
-    st.markdown("**Long Term**")
-    for item in roadmap["Long Term"]:
-        st.write("- " + item)
-
-    if roadmap["budget_hint"]:
-        st.info(" ".join(roadmap["budget_hint"]))
+    roadmap = build_roadmap(current_status, goal, budget, marks)
 
     st.markdown("---")
+    st.markdown("### Your Personalized CareerRaah")
 
-    # Affiliate / recommended course placeholder
-    sample_url = f"https://example.com/recommended?course={quote_plus(roadmap['career_goal'])}"
-    st.markdown(f"[Recommended Course 🔗]({sample_url})")
+    # Result Cards
+    st.info(f"**The Strategy:** {roadmap['strategy']}")
+    st.success(f"**Immediate Step:** {roadmap['immediate_step']}")
+    
+    st.warning(f"**Recommended Certification:** [{roadmap['monetization']['text']}]({roadmap['monetization']['url']})")
     st.caption("(Affiliate link placeholder)")
 
 else:
-    st.write("Enter your details and click 'Generate Roadmap' to get started.")
+    st.write("Enter your details and click 'Generate My CareerRaah ⚡' to get started.")
+
+# --- Footer ---
+st.markdown("""
+    <div class="footer">
+        <p>
+            <a href="#">About Us</a> | 
+            <a href="#">Privacy Policy</a> | 
+            <a href="#">Terms of Service</a> | 
+            <a href="#">Partner with Us</a>
+        </p>
+        <p class="disclaimer">
+            CareerRaah uses AI to provide suggestions. Please verify with human experts before making financial decisions.
+        </p>
+        <p class="copyright">
+            © 2025 CareerRaah Technologies. Made with ❤️ in India.
+        </p>
+        <div class="socials">
+            <a href="https://www.linkedin.com" target="_blank">LinkedIn</a> | 
+            <a href="https://www.instagram.com" target="_blank">Instagram</a>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
