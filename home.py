@@ -50,10 +50,14 @@ st.markdown(f"""
     /* Header Style */
     .header-container {{
         background: {header_bg};
-        background-size: cover; background-position: center;
+        background-size: cover; 
+        background-position: center;
         border-radius: 0 0 20px 20px;
-        padding: 1.5rem; margin: -1rem -1rem 1rem -1rem;
-        text-align: center; color: white;
+        
+        /* FIX: Set fixed height because we removed the text */
+        height: 220px; 
+        
+        margin: -1rem -1rem 1rem -1rem;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }}
     
@@ -108,11 +112,10 @@ st.markdown(f"""
 # --- 4. APP LOGIC ---
 
 # A. Header
+# We removed the <h1> and <p> tags because the text is now in the background image
 st.markdown(f"""
     <div class="header-container">
-        <h1 style='margin:0; font-size: 2rem;'>CareerRaah 🚀</h1>
-        <p style='margin:0; opacity:0.9;'>Path to Success</p>
-    </div>
+        &nbsp; </div>
 """, unsafe_allow_html=True)
 
 # B. THE MAIN VIEW SWITCHER (Sub-Tabs)
@@ -144,7 +147,8 @@ if view_mode == "🔥 Trends":
                         {formatted_ans}
                     </div>
                 """, unsafe_allow_html=True)
-                st.button(f"👉 Get Roadmap", key=f"btn_{question}")
+                if st.button(f"👉 Get Roadmap", key=f"btn_{question}"):
+                    st.toast("🗺️ Roadmap feature is coming soon!", icon="✨")
 
 # --- VIEW 2: SALARY TOOL ---
 elif view_mode == "💰 Salary Tool":
@@ -191,10 +195,10 @@ st.markdown("""
         <div class="nav-item active">
             <span class="nav-icon">🏠</span>Home
         </div>
-        <div class="nav-item">
+        <div class="nav-item" onclick="alert('Roadmap feature is coming soon!');">
             <span class="nav-icon">🗺️</span>Roadmap
         </div>
-        <div class="nav-item">
+        <div class="nav-item" onclick="alert('Profile feature is coming soon!');">
             <span class="nav-icon">👤</span>Profile
         </div>
     </div>
