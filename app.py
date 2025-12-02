@@ -28,10 +28,22 @@ st.markdown("""
             font-weight: 600;
             color: var(--primary-blue);
         }
+        
+        p, .stMarkdown {
+            font-size: 16px !important; /* Bigger text for mobile reading */
+        }
 
         /* Hide default Streamlit elements */
+        #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
+        header {visibility: hidden;}
         .st-emotion-cache-1c5k3kr {display: none;}
+
+        /* --- Layout improvements --- */
+        .block-container {
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+        }
 
         /* --- 3.1 Header --- */
         .header-container {
@@ -60,36 +72,6 @@ st.markdown("""
             color: var(--dark-text);
             max-width: 600px;
             margin: 0 auto;
-        }
-        
-        /* --- 4. Why CareerRaah --- */
-        .trust-section {
-            padding: 4rem 2rem;
-            background-color: var(--light-grey);
-            text-align: center;
-        }
-        .trust-section h2 {
-            margin-bottom: 2rem;
-        }
-        .trust-card {
-            background-color: var(--soft-white);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-        .trust-card h3 {
-            font-size: 1.2rem;
-            margin-top: 1rem;
-        }
-
-        /* --- 5. Choose Your Goal --- */
-        .goal-section {
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-        .goal-section h2 {
-            margin-bottom: 2rem;
         }
         
         /* --- 9. Footer --- */
@@ -129,27 +111,30 @@ st.markdown("""
             .hero h1 { font-size: 1.6rem; line-height:1.15; }
             .hero p { font-size: 0.95rem; padding: 0 0.5rem; }
 
-            /* Trust / goal sections stack and cards become full-width */
-            .trust-section, .goal-section { padding: 1.5rem 0.75rem; }
-            .trust-card { margin-bottom: 1rem; box-shadow: none; }
-
-            /* Make form controls and buttons full-width and larger for touch */
-            .stButton>button, .stButton>div>button {
-                width: 100% !important;
-                padding: 12px 14px !important;
-                font-size: 1rem !important;
-            }
-            .stTextInput>div>div>input, textarea, select, .stSelectbox>div>div>select, .stSlider>div {
-                width: 100% !important;
-                box-sizing: border-box !important;
-            }
-
             /* Ensure columns stack vertically */
             .stColumns [class*="css-"] {
                 flex-direction: column !important;
             }
 
             img, .logo img { max-width: 100% !important; height: auto !important; }
+        }
+
+        /* Make Buttons "Fat" & "Clickable" (Thumb-friendly) */
+        .stButton>button {
+            width: 100%;
+            border-radius: 12px;
+            height: 3em;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Make Expanders (Accordions) look like Cards */
+        .streamlit-expanderHeader {
+            background-color: #f0f2f6;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #1A3C8D; /* Your Brand Blue */
         }
 
         /* Desktop container width to improve readability */
@@ -182,129 +167,70 @@ def generate_pdf(roadmap_data):
 
 
 # --- Session State ---
-if 'page' not in st.session_state:
-    st.session_state.page = 'Home'
 if 'goal' not in st.session_state:
     st.session_state.goal = None
 if 'form_inputs' not in st.session_state:
     st.session_state.form_inputs = {}
-
-
-def navigate_to(page_name):
-    st.session_state.page = page_name
-
-# --- Sidebar Navigation ---
-with st.sidebar:
-    st.image("logo/careerRaah-logo.png", width=150)
-    st.markdown("---")
-    if st.button("Home 🏠"):
-        navigate_to("Home")
-    st.markdown("### Why CareerRaah")
-    st.markdown("### Features")
-    st.markdown("### Pricing")
-    st.markdown("### For Parents")
-    st.markdown("---")
-    st.button("Login")
-    if st.button("Start Your Path →", type="primary"):
-        navigate_to("Home")
+if 'page' not in st.session_state:
+    st.session_state.page = 'Home'
 
 
 # --- Simplified Header ---
-col1, col2 = st.columns([3, 1])
-with col1:
-    st.markdown('<div class="header-title">CareerRaah</div>', unsafe_allow_html=True)
-with col2:
-    st.markdown('<div class="header-cta">', unsafe_allow_html=True)
-    if st.button("Start My Career Journey →", type="primary", use_container_width=True):
-        # This button is for visual representation in the header, 
-        # the main CTA is in the hero section.
-        pass
-    st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('<div class="header-title">CareerRaah</div>', unsafe_allow_html=True)
 
 
-# --- Page Routing ---
+# --- Hero Section ---
+st.markdown("""
+    <div class="hero">
+        <h1>Find Your Path. Build Your Future.</h1>
+        <p>Private. Instant. Judgment-free career guidance — for every student in India.</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# --- KNOWLEDGE BASE ---
+knowledge_base = {
+    "Confused Student (Class 9-10)": {
+        "What subjects should I choose after 10th?": "Focus on your interests and strengths. Science is great for engineering/medical, Commerce for business/finance, and Arts for creative fields. We can help you find the best fit.",
+        "How do I tell my parents what I want to do?": "Show them a plan. Research the career you're interested in, the courses you'll need, and the job prospects. We can help you build a detailed roadmap to share with them.",
+        "I'm not good at studies, what can I do?": "Everyone has unique talents. Let's explore vocational courses, creative fields, or skill-based training that can lead to a successful career. There are many paths to success.",
+    },
+    "Ambitious Student (Class 11-12)": {
+        "Which competitive exam is best for me?": "It depends on your goal. JEE for Engineering, NEET for Medical, CLAT for Law, and CUET for many central universities. Let's analyze your profile to find the right one.",
+        "How can I get into a top college abroad?": "You'll need good grades, a strong profile with extracurriculars, and high scores in exams like SAT/ACT and TOEFL/IELTS. We can guide you through the entire process.",
+        "What skills should I learn along with my studies?": "Communication, coding, and financial literacy are valuable in any field. We can suggest specific skills and resources based on your career goals.",
+    },
+    "Concerned Parent": {
+        "Is my child choosing the right career?": "We can help you and your child explore various options based on their aptitude and interests, providing a clear path and reducing uncertainty.",
+        "How can I support my child's non-traditional career choice?": "Understand their passion, research the field together, and create a backup plan. We provide resources to help parents support their child's dreams.",
+        "The career my child wants is too expensive, what can we do?": "There are many scholarships, education loans, and 'earn-while-you-learn' options available. We can help you find the right financial aid.",
+    }
+}
+
+# --- MOBILE-FIRST LAYOUT ---
 if st.session_state.page == 'Home':
-    # --- 3.2 Hero Section ---
-    st.markdown("""
-        <div class="hero">
-            <h1>Find Your Path. Build Your Future.</h1>
-            <p>Private. Instant. Judgment-free career guidance — for every student in India.</p>
-        </div>
-    """, unsafe_allow_html=True)
-    if st.button("Start My Career Journey →", type="primary", key="hero_cta"):
-        # This is the main CTA
-        # In a real app this would scroll to the form
-        st.info("Please fill out the form below to get started.")
+    # 1. The Persona Selector (Sticky-ish Navigation)
+    st.write("#### 👤 Who are you?")
+    selected_persona = st.selectbox(
+        "Select your profile:",
+        list(knowledge_base.keys()),
+        label_visibility="collapsed"  # Hides the label to save space
+    )
 
+    st.divider()
 
-    # --- 4. Why CareerRaah ---
-    with st.container():
-        st.markdown('<div class="trust-section">', unsafe_allow_html=True)
-        st.markdown('<h2>Guidance You Can Trust</h2>', unsafe_allow_html=True)
-        cols = st.columns(3, gap="large")
-        with cols[0]:
-            st.markdown("""
-                <div class="trust-card">
-                    <h3>🛡️ Judgment-Free</h3>
-                    <p>Share marks, dreams, fears — privately.</p>
-                </div>
-            """, unsafe_allow_html=True)
-        with cols[1]:
-            st.markdown("""
-                <div class="trust-card">
-                    <h3>⚡ Instant Clarity</h3>
-                    <p>Get personalized career roadmaps in 30 seconds.</p>
-                </div>
-            """, unsafe_allow_html=True)
-        with cols[2]:
-            st.markdown("""
-                <div class="trust-card">
-                    <h3>₹ Affordable for Everyone</h3>
-                    <p>Most guidance is free. Premium starts at ₹29.</p>
-                </div>
-            """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-    
-    # --- 5. Choose Your Goal ---
-    with st.container():
-        st.markdown('<div class="goal-section">', unsafe_allow_html=True)
-        st.markdown('<h2>Choose Your Goal</h2>', unsafe_allow_html=True)
-        
-        cols = st.columns(4)
-        goals = ["Engineer", "UPSC Officer", "MBA / Business", "Software Developer", "Designer", "Government Jobs", "Abroad Study", "Not Sure?"]
-        for i, goal in enumerate(goals):
-            if cols[i%4].button(goal, key=f"goal_{i}", use_container_width=True):
-                st.session_state.goal = goal
-                st.info(f"You selected: {goal}. Now, tell us more below. (Note: Smooth scroll is a UX goal, this is a functional stand-in)")
+    # 2. The Questions (Accordion Style - Saves Vertical Space)
+    st.write(f"**🔥 Top Questions for {selected_persona}**")
 
-        st.markdown('</div>', unsafe_allow_html=True)
-
-
-    # --- 6. Smart Career Generator ---
-    with st.form(key='generator_form'):
-        st.markdown("### Tell us about yourself")
-        
-        status = st.selectbox("Step 1: Your Current Stage", ["9–10", "11–12", "College", "Graduate", "Working Professional"])
-        
-        goal_options = ["Engineer", "UPSC Officer", "MBA / Business", "Software Developer", "Designer", "Government Jobs", "Abroad Study", "Not Sure?"]
-        goal_index = goal_options.index(st.session_state.goal) if st.session_state.goal in goal_options else len(goal_options) - 1
-        goal = st.selectbox("Step 2: Your Goal", goal_options, index=goal_index)
-        
-        challenges = st.multiselect("Step 3: Your Biggest Challenge(s)", ["Low Marks", "No Money", "Confused", "Parents Pressure", "All of these"])
-        
-        submitted = st.form_submit_button("Generate My CareerRaah ⚡")
-
-        if submitted:
-            st.session_state.form_inputs = {
-                "status": status,
-                "goal": goal,
-                "challenges": challenges
-            }
-            with st.spinner("Building your personalized roadmap..."):
-                import time
-                time.sleep(2)
-            navigate_to("Roadmap")
-            st.rerun()
+    # Loop through the dictionary
+    questions = knowledge_base[selected_persona]
+    for q, ans in questions.items():
+        with st.expander(f"❓ {q}"):
+            st.markdown(ans)
+            # Add a CTA button inside the answer
+            if st.button(f"👉 Get Roadmap for this", key=q):
+                st.session_state.goal = q
+                st.session_state.page = "Roadmap"
+                st.rerun()
 
 elif st.session_state.page == 'Roadmap':
     # --- 7. Output Page ---
@@ -313,7 +239,7 @@ elif st.session_state.page == 'Roadmap':
 
     # This is placeholder data. In a real app, this would be generated by an AI model.
     roadmap_data = {
-        "Selected Goal": st.session_state.form_inputs.get('goal', 'Not specified'),
+        "Selected Goal": st.session_state.goal,
         "Action Plan": "Based on your inputs, here's a 6-month plan...",
         "Month 1-2": "Foundational Skills in your chosen field.",
         "Month 3-4": "Build 2-3 portfolio projects.",
@@ -340,12 +266,12 @@ elif st.session_state.page == 'Roadmap':
     st.download_button(
         label="Download My Career Blueprint PDF",
         data=pdf_data,
-        file_name=f"CareerRaah_Blueprint_{st.session_state.form_inputs.get('goal', 'general')}.pdf",
+        file_name=f"CareerRaah_Blueprint_{st.session_state.goal}.pdf",
         mime="application/pdf"
     )
-    
+
     if st.button("← Start Over"):
-        navigate_to("Home")
+        st.session_state.page = "Home"
         st.session_state.goal = None
         st.rerun()
 
@@ -358,7 +284,6 @@ st.markdown("""
         </p>
     </div>
 """, unsafe_allow_html=True)
-
 
 # --- 9. Footer ---
 with st.container():
