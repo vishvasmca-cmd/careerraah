@@ -1,0 +1,90 @@
+{
+  "Higher Secondary": {
+    "icon": "🎓",
+    "desc": "Engineering, Medical, Commerce & Arts (Classes 11-12)",
+    "qa": {
+      "B.Tech vs BCA?": {
+        "ans": "👉 **B.Tech:** 4 years. High value for big MNCs (Google/Microsoft). Higher fees.\n👉 **BCA:** 3 years. Faster & cheaper. To match B.Tech salary, you often need MCA later.\n**Verdict:** Want a job ASAP? Go BCA. Aiming for top-tier tech roles? Go B.Tech.",
+        "video": "https://www.youtube.com/shorts/Y6i3lyplLB8"
+      },
+      "High paying Arts jobs?": {
+        "ans": "Arts ≠ Low Salary! Top roles in 2025:\n1. **Product/UX Designer** (₹6-12 LPA)\n2. **Corporate Lawyer** (₹8-15 LPA)\n3. **Digital Marketing Manager** (₹5-10 LPA)",
+        "video": "https://www.youtube.com/shorts/s362uy5O8TY"
+      },
+      "Drop Year vs Tier-3 College?": {
+        "ans": "👉 **Drop Year:** Only if you are 100% sure you can study 12 hours/day. Success rate is <10%.\n👉 **Tier-3 College:** Join if you are burnt out. Focus on Off-Campus placements.",
+        "video": "https://www.youtube.com/watch?v=KTMCSv4FH7E"
+      },
+      "M.Tech vs Job after B.Tech?": {
+        "ans": "📉 **M.Tech:** Useful only from IITs/NITs for specialized R&D. Otherwise, low ROI.\n📈 **Job:** Work experience is often valued more. Switch to M.Tech later if needed.\n**Verdict:** 90% of the time, take the job.",
+        "video": "https://www.youtube.com/shorts/n4-5m_o6Fgo"
+      },
+      "Loan for Tier 1 College?": {
+        "ans": "✅ **Yes.** Education loans for Tier-1 colleges (IITs/IIMs) are a smart investment. The ROI is high due to massive placement packages. Don't take a loan for a local Tier-3 college.",
+        "video": "https://www.youtube.com/shorts/oD0lP0S_c6k"
+      }
+    }
+  },
+  "High School": {
+    "icon": "🎒",
+    "desc": "Stream Selection & School Choice (Classes 9-10)",
+    "qa": {
+      "Science or Commerce?": {
+        "ans": "🧬 **Science:** Opens ALL doors (you can switch to Commerce/Arts later). Hardest workload.\n📊 **Commerce:** Specialized for Finance/Business. Cannot switch to Science later.\n🎨 **Arts:** Best for UPSC/Law/Design. High scoring in Boards.",
+        "video": "https://www.youtube.com/shorts/x1xE8fR3dTw"
+      },
+      "Dummy vs Regular School?": {
+        "ans": "🏫 **Dummy School:** Saves 6-8 hours/day. Essential for serious JEE/NEET rankers.\n🎒 **Regular School:** Better personality development and backup if coaching fails.",
+        "video": "https://www.youtube.com/shorts/VmceXYYZO2A"
+      },
+      "Boards vs Coaching?": {
+        "ans": "**Coaching is the priority.** Board marks (above 75%) are necessary only for eligibility.\n**Action:** Focus 80% of time on JEE/NEET prep and 20% on board exams (NCERT books).",
+        "video": "https://www.youtube.com/shorts/L6V-e9Lq5n8"
+      },
+      "PCM vs PCB (Maths or Bio)?": {
+        "ans": "The hardest choice!\n🧮 **PCM:** Engineering, Aviation, Architecture. Logic-heavy.\n🩺 **PCB:** Doctor, Pharma, Biotech. Memory-heavy.\n**Warning:** Don't take PCMB (Both) unless you are a topper.",
+        "video": "https://www.youtube.com/shorts/lYchKuB6GR4"
+      }
+    }
+  },
+  "Job Seeker": {
+    "icon": "💼",
+    "desc": "Resumes, Interview & Salary tips.",
+    "qa": {
+      "Resume Tips": {
+        "ans": "1. **No Photos.** 2. Use Standard format (ATS friendly).\n3. Highlight **Projects** & **Impact** (e.g., 'Increased sales by 20%') over just listing duties.",
+        "video": "https://www.youtube.com/shorts/GvtEqI5oP-Q"
+      },
+      "Salary Negotiation": {
+        "ans": "Never say 'As per industry standards'. Ask for 10-20% more than your actual target. Be polite but firm about your market worth.",
+        "video": "https://www.youtube.com/shorts/x8-Vw1zy6NA"
+      },
+      "Service vs Product Company?": {
+        "ans": "🏢 **Service (TCS/Infy):** Easier entry, lower starting pay (3-5 LPA).\n🚀 **Product (Amazon/Uber):** Hard interview (DSA), very high pay (12+ LPA).",
+        "video": "https://www.youtube.com/shorts/Z9Kg2iMwTHU"
+      },
+      "How to explain Career Gap?": {
+        "ans": "**Don't lie.** HRs can check PF records.\n✅ **Good Reason:** 'I was upskilling (Course X)', 'Family medical emergency', 'Attempted a startup'.\n❌ **Bad Reason:** 'I just took a break' or 'I was preparing for Govt exams' (without a backup skill).",
+        "video": "https://www.youtube.com/shorts/d9qRYRamK3A"
+      }
+    }
+  },
+  "Govt Aspirant": {
+    "icon": "🇮🇳",
+    "desc": "UPSC, SSC, Banking & Railways.",
+    "qa": {
+      "UPSC Salary & Perks?": {
+        "ans": "The Status is the reward. Salary is good (₹80k-₹1.5L basic + allowances). Perks include accommodation, car, and unparalleled social authority.",
+        "video": "https://www.youtube.com/shorts/W23x-QW6f6E"
+      },
+      "Is it too late to start UPSC at 25?": {
+        "ans": "NO. The average age of selection is 29-30. Your degree and work experience now become your advantage in the interview round. Start immediately!",
+        "video": "https://www.youtube.com/shorts/O4M9uI1eT-A"
+      },
+      "SSC vs Banking?": {
+        "ans": "⚡ **Banking (IBPS/SBI):** Fast process (Job in 6 months). High work pressure.\n🐢 **SSC CGL:** Slow process (1-2 years). Better work-life balance & power.",
+        "video": "https://www.youtube.com/watch?v=QgZxdhHqY4Y"
+      }
+    }
+  }
+}
