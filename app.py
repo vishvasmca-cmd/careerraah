@@ -10,24 +10,42 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- 1. AI CONFIGURATION (SECURE) ---
-api_key = None
-try:
-    # Try loading from Streamlit Secrets (Best Practice)
-    if "GOOGLE_API_KEY" in st.secrets:
-        api_key = st.secrets["GOOGLE_API_KEY"]
+import streamlit as st
+import time
+import google.generativeai as genai
+import os  # <--- Essential for Render
 
-    if api_key:
-        genai.configure(api_key=api_key)
+# --- 1. AI CONFIGURATION (Cloud Compatible) ---
+try:
+    # OPTION 1: Try getting key from Render Environment Variables (Best for Cloud)
+    api_key = os.environ.get("GOOGLE_API_KEY")
+    
+    # OPTION 2: If no env var found, try local secrets file (Best for Local)
+    if not api_key:
+        try:
+            # We access st.secrets inside a nested try block so it doesn't crash the app if missing
+            api_key = st.secrets["GOOGLE_API_KEY"]
+        except FileNotFoundError:
+            # This means we are on Render but forgot to set the Env Var
+            pass 
+
+    # VALIDATION
+    if not api_key:
+        st.error("❌ API Key Not Found!")
+        st.info("On Render? Go to Dashboard -> Settings -> Environment Variables and add 'GOOGLE_API_KEY'.")
+        st.stop() # Stop the app so it doesn't crash later
+
+    # CONFIGURE GEMINI
+    genai.configure(api_key=api_key)
+    
+    # Model Fallback Logic (Switching to 1.5 if 2.5 is unavailable)
+    try:
         model = genai.GenerativeModel('gemini-2.5-flash')
-    else:
-        st.error("❌ Google API Key not found!")
-        st.warning("Please add your GOOGLE_API_KEY to the .streamlit/secrets.toml file.")
-        st.stop()
+    except:
+        model = genai.GenerativeModel('gemini-1.5-flash')
 
 except Exception as e:
     st.error(f"❌ AI Config Error: {e}")
-    st.stop()
 
 # --- 2. CSS & UI SETUP ---
 st.markdown("""
