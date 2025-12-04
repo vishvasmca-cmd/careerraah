@@ -280,11 +280,25 @@ if st.session_state.step == 4:
         horizontal=True
     )
 
+    st.markdown("---")
+    promo_code = st.text_input("✨ Please enter your Promo Code to proceed", placeholder="Enter code here")
+    st.session_state.answers["promo_code"] = promo_code
+
+    # --- Promo Code Validation ---
+    is_promo_valid = (promo_code == "PR2025")
+    if promo_code and not is_promo_valid:
+        st.warning("Invalid promo code. Please check and try again.")
+    elif is_promo_valid:
+        st.success("Promo code applied successfully!")
+
+
     c1, c2 = st.columns(2)
     if c1.button("⟵ Back", use_container_width=True):
         st.session_state.step = 3
         st.rerun()
-    if c2.button("Generate Report ➝", type="primary", use_container_width=True):
+        
+    # Disable button if promo is not valid
+    if c2.button("Generate Report ➝", type="primary", use_container_width=True, disabled=not is_promo_valid):
         st.session_state.step = 5
         st.rerun()
 
