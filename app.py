@@ -3,14 +3,26 @@ from fpdf import FPDF
 import time
 import google.generativeai as genai
 
-# --- 1. AI CONFIGURATION ---
-GOOGLE_API_KEY = "AIzaSyBCHAg7zv6BQotkIzVzNAjXqPsEyl6rOh0"
+import streamlit as st
+import time
+import google.generativeai as genai
 
+# --- 1. AI CONFIGURATION (SECURE) ---
 try:
-    genai.configure(api_key=GOOGLE_API_KEY)
+    # Try loading from Streamlit Secrets (Best Practice)
+    if "GOOGLE_API_KEY" in st.secrets:
+        api_key = st.secrets["GOOGLE_API_KEY"]
+    else:
+        # Fallback for local testing if secrets.toml is missing (Not recommended for production)
+        # ONLY use this if you haven't set up secrets.toml yet.
+        api_key = "AIzaSy...REPLACE_WITH_NEW_KEY" 
+
+    genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-2.5-flash')
+
 except Exception as e:
-    st.error(f"AI Config Error: {e}")
+    st.error(f"❌ AI Config Error: {e}")
+    st.warning("Please check your .streamlit/secrets.toml file.")
 
 # --- 2. CSS & UI SETUP ---
 st.markdown("""
