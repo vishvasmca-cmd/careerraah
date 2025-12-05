@@ -77,7 +77,7 @@ def get_header():
         background: linear-gradient(135deg, #1A3C8D 0%, #0d255e 100%);
         background-size: cover; background-position: center;
         border-radius: 0 0 20px 20px;
-        height: 220px;
+        height: auto;
         padding: 1.5rem; margin: -1rem -1rem 1rem -1rem;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }

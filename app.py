@@ -127,13 +127,23 @@ def login_page():
             text-align: center;
         }
 
-        /* Style text inputs */
-        div[data-testid="stTextInput"] input {
-            height: 50px;
-            padding: 10px;
-            border-radius: 8px;
+        /* Style Text Inputs (Fixed for iPhone/Safari) */
+        .stTextInput {
+            position: relative; 
+            z-index: 101; /* Force it above the header/background */
+        }
+        
+        .stTextInput input {
+            border-radius: 10px;
             border: 1px solid #ccc;
-            background-color: #f8f9fa;
+            padding: 15px; 
+            font-size: 16px !important; /* Prevents iOS auto-zoom */
+            background-color: white; /* Ensures it's not transparent */
+        }
+        
+        .stTextInput input:focus {
+            border-color: #FF6B00;
+            box-shadow: 0 0 0 1px #FF6B00;
         }
 
         /* Modern radio buttons */
