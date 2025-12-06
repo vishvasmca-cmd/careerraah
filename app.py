@@ -4,11 +4,41 @@ import google.generativeai as genai
 
 # --- 0. PAGE CONFIG ---
 st.set_page_config(
-    page_title="CareerRaah",
+    page_title="CareerRaah - AI Career Guidance",
     page_icon="🚀",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
+
+# --- IPHONE TAP FIX ---
+st.markdown("""
+    <style>
+    /* 1. Force Input Fields to the very top layer */
+    .stTextInput, .stTextInput > div, .stTextInput input {
+        position: relative !important;
+        z-index: 99999 !important; /* Higher than everything else */
+        pointer-events: auto !important; /* Force it to accept taps */
+    }
+
+    /* 2. Push the Header to the background */
+    .header-container, .hero-section {
+        z-index: 0 !important;
+        position: relative;
+    }
+
+    /* 3. Safety margin for Mobile to prevent overlap */
+    @media (max-width: 600px) {
+        .header-container, .hero-section {
+            margin-bottom: 20px !important; /* Push content down */
+        }
+        
+        /* Reset negative margins that might pull content up too high */
+        div[data-testid="stVerticalBlock"] > div {
+            margin-top: 0px !important;
+        }
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 import streamlit as st
 import time
@@ -120,72 +150,22 @@ if "final_report" not in st.session_state:
     st.session_state.final_report = None
 
 def login_page():
+    # --- HEADER WITH IPHONE FIX ---
     st.markdown("""
-    <style>
-        /* Center the form elements */
-        div[data-testid="stForm"] {
-            text-align: center;
-        }
-
-        /* Style Text Inputs (Fixed for iPhone/Safari) */
-        .stTextInput {
-            position: relative; 
-            z-index: 101; /* Force it above the header/background */
-        }
-        
-        .stTextInput input {
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            padding: 15px; 
-            font-size: 16px !important; /* Prevents iOS auto-zoom */
-            background-color: white; /* Ensures it's not transparent */
-        }
-        
-        .stTextInput input:focus {
-            border-color: #FF6B00;
-            box-shadow: 0 0 0 1px #FF6B00;
-        }
-
-        /* Modern radio buttons */
-        div[data-testid="stRadio"] > div[role="radiogroup"] {
-            display: flex;
-            justify-content: center;
-        }
-        div[data-testid="stRadio"] label {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            margin: 5px;
-            cursor: pointer;
-            background-color: #f8f9fa;
-        }
-        div[data-testid="stRadio"] input[type="radio"]:checked + div {
-            background-color: #1A3C8D;
-            color: white;
-            border-color: #1A3C8D;
-        }
-        div[data-testid="stRadio"] input[type="radio"] {
-            display: none;
-        }
-
-        @media (max-width: 600px) {
-            div[data-testid="stRadio"] > div[role="radiogroup"] {
-                flex-direction: column;
-            }
-        }
-    
+        <style>
+        /* 1. Basic Reset */
         .block-container {
             padding-top: 0rem !important;
             padding-bottom: 0rem !important;
         }
 
+        /* 2. Hero Section (Desktop Default) */
         .hero-section {
-            background: linear-gradient(to right, rgba(26, 60, 141, 0.9), rgba(26, 60, 141, 0.5)), 
-                        url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=1469&auto=format&fit=crop');
+            background: linear-gradient(to right, rgba(26, 60, 141, 0.9), rgba(26, 60, 141, 0.6)), 
+                        url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1470&auto=format&fit=crop');
             background-size: cover;
             background-position: center 20%;
-            height: 300px;
+            height: 320px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -193,43 +173,74 @@ def login_page():
             color: white;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            margin-bottom: 30px;
+            
+            /* DESKTOP: Creates space for the overlapping cards */
+            margin-bottom: 30px; 
+            position: relative;
+            z-index: 0; /* Send to back */
         }
-        
+
+        /* 3. Typography */
         .hero-title {
             font-family: 'Helvetica Neue', sans-serif;
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: 800;
             margin: 0;
             text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
         }
-        
         .hero-subtitle {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 500;
-            margin-top: 10px;
+            margin-top: 5px;
             opacity: 0.95;
+            color: #E3F2FD;
         }
-
         .hero-tagline-box {
-            background: #FF6B00; /* Orange */
+            background: #FF6B00;
             color: white;
-            padding: 10px 25px;
-            border-radius: 30px;
+            padding: 10px 20px;
+            border-radius: 50px;
             margin-top: 20px;
             font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 10px rgba(255, 107, 0, 0.4);
+            font-size: 1rem;
+            box-shadow: 0 6px 15px rgba(255, 107, 0, 0.4);
             display: inline-block;
+            border: 2px solid white;
         }
-    </style>
 
-    <div class="hero-section">
-        <h1 class="hero-title">CareerRaah 🚀</h1>
-        <div class="hero-subtitle">Sahi Disha. Sahi Raah. Guiding Bharat to Success.</div>
-        <div class="hero-tagline-box">Expert Career Counseling & Roadmap. Generated in < 5 Minutes.</div>
-    </div>
+        /* --- 4. IPHONE / MOBILE FIX (Crucial) --- */
+        @media (max-width: 600px) {
+            /* Shrink header height so it takes less space */
+            .hero-section {
+                height: 260px !important;
+                margin-bottom: 0px !important; /* Remove overlap gap */
+            }
+            
+            /* Shrink fonts to fit screen */
+            .hero-title { font-size: 2.2rem !important; }
+            .hero-subtitle { font-size: 1.1rem !important; }
+            .hero-tagline-box { font-size: 0.9rem !important; margin-top: 15px; }
+
+            /* FORCE inputs to be clickable by pushing them DOWN */
+            /* This target the main app container below the header */
+            div[data-testid="stVerticalBlock"] {
+                gap: 1rem !important; /* Adds safe space between elements */
+            }
+            
+            /* Ensure Inputs are on top of everything */
+            .stTextInput, .stButton {
+                position: relative !important;
+                z-index: 9999 !important;
+            }
+        }
+        </style>
+
+        <div class="hero-section">
+            <h1 class="hero-title">CareerRaah 🚀</h1>
+            <div class="hero-subtitle">Your Personal AI Career Guide</div>
+            <div class="hero-tagline-box">Get your personalized AI Career Roadmap in under 5 minutes</div>
+        </div>
     """, unsafe_allow_html=True)
 
     with st.form(key='login_form'):
@@ -355,8 +366,30 @@ else:
 
         st.session_state.answers["strong_subjects"] = st.multiselect("Which subjects do you genuinely enjoy & score well in?", ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Science/IP", "Accounts", "Economics", "Business Studies", "History/Pol Sci", "Geography", "English/Literature", "Art/Design"])
         
-        st.session_state.answers["academic_score"] = st.select_slider("What is your average aggregate percentage?", options=["< 60%", "60% - 75%", "75% - 85%", "85% - 95%", "95% + (Topper)"])
+      #  st.session_state.answers["academic_score"] = st.select_slider("What is your average aggregate percentage?", options=["< 60%", "60% - 75%", "75% - 85%", "85% - 95%", "95% + (Topper)"])
         
+        # 2. Academic Reality Check (Numeric Slider)
+        raw_marks = st.slider(
+            "What is your average aggregate percentage?",
+            min_value=40, 
+            max_value=99, 
+            value=70,
+            format="%d%%" # Adds the % sign visually
+        )
+
+        # Convert Number to Text Bucket for the AI
+        if raw_marks < 60:
+            st.session_state.answers["academic_score"] = "< 60%"
+        elif 60 <= raw_marks < 75:
+            st.session_state.answers["academic_score"] = "60% - 75%"
+        elif 75 <= raw_marks < 85:
+            st.session_state.answers["academic_score"] = "75% - 85%"
+        elif 85 <= raw_marks < 95:
+            st.session_state.answers["academic_score"] = "85% - 95%"
+        else:
+            st.session_state.answers["academic_score"] = "95% + (Topper)"
+
+
         st.session_state.answers["exam_status"] = st.multiselect(
             "Are you preparing for any entrance exams? (Select one or more)",
             [
@@ -429,8 +462,21 @@ else:
 
         st.write("**💰 College Budget Expectation (Per Year)**")
         st.caption("This helps us suggest Pvt vs Govt colleges.")
-        st.session_state.answers["budget"] = st.select_slider("Select Range:", options=["Low (< ₹1L)", "Medium (₹1L - ₹4L)", "High (₹4L - ₹10L)", "Premium (> ₹10L)"])
-
+    # Using a numeric slider for smoother feel
+        raw_budget = st.slider(
+            "Drag to select amount (₹)",
+            min_value=50000, max_value=1500000, value=200000, step=50000,
+            format="₹%d"
+        )
+        
+        # Convert Number to Text Bucket for the AI
+        if raw_budget <= 100000: budget_bucket = "Low (< ₹1L)"
+        elif raw_budget <= 400000: budget_bucket = "Medium (₹1L - ₹4L)"
+        elif raw_budget <= 1000000: budget_bucket = "High (₹4L - ₹10L)"
+        else: budget_bucket = "Premium (> ₹10L)"
+        
+        # Save the bucket string (e.g., "Medium (₹1L - ₹4L)") to session state
+        st.session_state.answers["budget"] = budget_bucket
         st.session_state.answers["parent_pressure"] = st.checkbox("My parents strictly want Engineering/Medical.")
         
         st.session_state.answers["location"] = st.radio("Where do you want to study?", ["No Preference","Home Town (Day Scholar)", "Metro City (Hostel OK)", "Abroad (High Budget)"])
